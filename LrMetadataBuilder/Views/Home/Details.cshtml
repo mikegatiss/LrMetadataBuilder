@@ -1,0 +1,16 @@
+﻿@model Event
+
+<div>
+    <h2>@Model.Name Details</h2>
+    
+    <dl>
+        <dt>Description</dt>
+        <dd class="caption">@Model.Description</dd>
+        <dt>Date</dt>
+        <dd>@Model.EventDate</dd>
+        <dt>Venue</dt>
+        <dd>@Model.Venue.VenueName</dd>
+    </dl>
+
+
+</div>

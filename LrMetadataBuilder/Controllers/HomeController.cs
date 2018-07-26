@@ -19,6 +19,7 @@ namespace LrMetadataBuilder.Controllers
             _eventRepository = eventRepository;
         }
 
+
         public IActionResult Index()
         {
             ViewBag.Title = "Available Events";
@@ -32,6 +33,16 @@ namespace LrMetadataBuilder.Controllers
             return View(homeViewModel);
         }
 
+        public IActionResult Details(int id)
+        {
+            var evt = _eventRepository.GetEventById(id);
+            if (evt == null)
+            {
+                return NotFound();
+            }
+
+            return View(evt);
+        }
 
         public IActionResult Error()
         {

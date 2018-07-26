@@ -23,7 +23,8 @@ namespace LrMetadataBuilder.Models
 
         public Event GetEventById(int eventId)
         {
-            return _appDbContext.Events.FirstOrDefault(e => e.Id == eventId);
+            var query = _appDbContext.Events.Include(e => e.Venue);
+            return query.FirstOrDefault(e => e.Id == eventId);
         }
     }
 }

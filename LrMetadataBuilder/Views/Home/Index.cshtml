@@ -1,21 +1,29 @@
-﻿@using LrMetadataBuilder.ViewModels
-@model LrMetadataBuilder.ViewModels.HomeViewModel
+﻿@model HomeViewModel
 
 <div>
-    <table>
+    <div>
+        <h2>Welcome to my Lightroom Metadata Builder</h2>
+        <p>As a regular photographer of Roller Derby Tournaments I spend a huge amount of time updating the metadata on my images,
+            so this is an attempt to automate some of that process.
+        </p>
+        <p>Longer term I intend to add the functionality to export the information as lightroom presets, but one step at a time.</p>
+    </div>
+    <table class="table table-striped">
         <tr>
             <th>Date</th>
             <th>Event Name</th>
             <th>Venue</th>
         </tr>
-        @foreach ( var evt in Model.Events)
-    {
-        <tr >
-            <td class="col-md-2">@evt.EventDate</td>
-            <td class="col-md-4">@evt.Name</td>
-            <td class="col-md-3">@evt.Venue</td>
-        </tr>
-    }
+        @foreach (var evt in Model.Events)
+        {
+            <tr >
+                <td class="col-md-2">@evt.EventDate</td>
+                <td class="col-md-4">
+                    <a asp-controller="Home" asp-action="Details" asp-route-id="@evt.Id">@evt.Name</a>
+                </td>
+                <td class="col-md-3">@evt.Venue.VenueName</td>
+            </tr>
+        }
     </table>
 
 </div>

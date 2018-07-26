@@ -1,0 +1,21 @@
+﻿@using LrMetadataBuilder.ViewModels
+@model LrMetadataBuilder.ViewModels.HomeViewModel
+
+<div>
+    <table>
+        <tr>
+            <th>Date</th>
+            <th>Event Name</th>
+            <th>Venue</th>
+        </tr>
+        @foreach ( var evt in Model.Events)
+    {
+        <tr >
+            <td class="col-md-2">@evt.EventDate</td>
+            <td class="col-md-4">@evt.Name</td>
+            <td class="col-md-3">@evt.Venue</td>
+        </tr>
+    }
+    </table>
+
+</div>

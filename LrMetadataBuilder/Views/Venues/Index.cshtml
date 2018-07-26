@@ -1,0 +1,10 @@
+﻿@model LrMetadataBuilder.ViewModels.VenueViewModel
+
+<h2>Venues</h2>
+
+<ul>
+    @foreach (var venue in (@Model.Venues))
+    {
+        <li>@venue.VenueName</li>
+    }
+</ul>

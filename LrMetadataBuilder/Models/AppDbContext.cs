@@ -16,6 +16,11 @@ namespace LrMetadataBuilder.Models
         }
         public DbSet<Venue> Venues { get; set; }
         public DbSet<Event> Events { get; set; }
+        public DbSet<League> Leagues { get; set; }
+        public DbSet<Team> Teams { get; set; }
+        public DbSet<Game> Games { get; set; }
+
+
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
@@ -23,7 +28,11 @@ namespace LrMetadataBuilder.Models
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
-         }
+            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
+            {
+                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+            }
+        }
 
         
     }

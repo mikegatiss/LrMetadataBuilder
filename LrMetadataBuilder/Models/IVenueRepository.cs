@@ -9,6 +9,10 @@ namespace LrMetadataBuilder.Models
     {
         IEnumerable<Venue> GetAllVenues();
         Venue GetVenueById(int venueId);
-        
+        void Add(Venue venue);
+        void Delete(Venue venue);
+        void Edit(Venue venue);
+        void Save();
+
     }
 }

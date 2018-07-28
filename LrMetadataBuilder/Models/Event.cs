@@ -12,7 +12,9 @@ namespace LrMetadataBuilder.Models
     {
         [Key]
         public int Id { get; set; }
-        public string EventDate { get; set; }
+        [DataType(DataType.Date)]
+        [DisplayFormat(ApplyFormatInEditMode = true, DataFormatString = "{0:dd/MM/yyyy}")]
+        public DateTime EventDate { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         [ForeignKey("Venue")]

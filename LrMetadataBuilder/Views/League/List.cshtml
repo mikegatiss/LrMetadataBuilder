@@ -1,0 +1,12 @@
+﻿@model LeagueViewModel
+
+<div>
+    <h2>Manage Leagues</h2>
+    <p>To update any of the league details, click on the EDIT link next to the league name. </p>
+    <ul>
+        @foreach (var league in Model.Leagues)
+        {
+            <li>@league.Name <a asp-controller="League" asp-action="Edit">EDIT</a></li>
+        }
+    </ul>
+</div>

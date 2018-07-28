@@ -11,9 +11,10 @@ using System;
 namespace LrMetadataBuilder.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20180728131152_AddedLeaguesTeamsAndGames")]
+    partial class AddedLeaguesTeamsAndGames
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -80,7 +81,7 @@ namespace LrMetadataBuilder.Data.Migrations
 
                     b.Property<string>("Description");
 
-                    b.Property<DateTime>("EventDate");
+                    b.Property<string>("EventDate");
 
                     b.Property<string>("Name");
 

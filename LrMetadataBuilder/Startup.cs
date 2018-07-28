@@ -36,6 +36,8 @@ namespace LrMetadataBuilder
             // Add application services.
             services.AddTransient<IVenueRepository, VenueRepository>();
             services.AddTransient<IEventRepository, EventRepository>();
+            services.AddTransient<ILeagueRepository, LeagueRepository>();
+            
             services.AddTransient<IEmailSender, EmailSender>();
 
             services.AddMvc();

@@ -12,7 +12,6 @@ namespace LrMetadataBuilder.Controllers
     public class HomeController : Controller
     {
         private readonly IEventRepository _eventRepository;
-        private readonly IVenueRepository _venueRepository;
 
         public HomeController(IEventRepository eventRepository)
         {

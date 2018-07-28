@@ -8,6 +8,10 @@ namespace LrMetadataBuilder.Models
     public interface IEventRepository
     {
         IEnumerable<Event> GetAllEvents();
-        Event GetEventById(int eventId);
+        Event GetEventById(int evntId);
+        void Add(Event evnt);
+        void Delete(Event evnt);
+        void Edit(Event evnt);
+        void Save();
     }
 }

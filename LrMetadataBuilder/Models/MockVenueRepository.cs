@@ -52,6 +52,26 @@ namespace LrMetadataBuilder.Models
             return _venues.FirstOrDefault(v => v.Id == venueId);
         }
 
+        public void Add(Venue venue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(Venue venue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Edit(Venue venue)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save()
+        {
+            throw new NotImplementedException();
+        }
+
         public void AddVenue(Venue venue)
         {
             _venues.Add(venue);

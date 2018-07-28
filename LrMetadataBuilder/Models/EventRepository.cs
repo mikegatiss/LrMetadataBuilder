@@ -26,5 +26,25 @@ namespace LrMetadataBuilder.Models
             var query = _appDbContext.Events.Include(e => e.Venue);
             return query.FirstOrDefault(e => e.Id == eventId);
         }
+
+        public void Add(Event evnt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Delete(Event evnt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Edit(Event evnt)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Save()
+        {
+            throw new NotImplementedException();
+        }
     }
 }

@@ -5,36 +5,40 @@ using System.Threading.Tasks;
 
 namespace LrMetadataBuilder.Models
 {
-    public class VenueRepository : IVenueRepository
+    public class LeagueRepository : ILeagueRepository
     {
         private readonly AppDbContext _appDbContext;
 
-        public VenueRepository(AppDbContext appDbContext)
+        public LeagueRepository(AppDbContext appDbContext)
         {
             _appDbContext = appDbContext;
         }
 
-        public IEnumerable<Venue> GetAllVenues()
+        public IEnumerable<League> GetAllLeagues()
         {
-            return _appDbContext.Venues;
+            return _appDbContext.Leagues;
         }
 
-        public Venue GetVenueById(int id)
+        public League GetLeagueById(int leagueId)
         {
-            return _appDbContext.Venues.FirstOrDefault(v => v.Id == id);
+            return _appDbContext.Leagues.FirstOrDefault(l => l.Id == leagueId);
         }
 
-        public void Add(Venue venue)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void Delete(Venue venue)
+        public void Add(League league)
         {
             throw new NotImplementedException();
         }
 
-        public void Edit(Venue venue)
+        public void Delete(League league)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void Edit(League league)
+        {
+            throw new NotImplementedException();
+        }
+        public void Update(League league)
         {
             throw new NotImplementedException();
         }

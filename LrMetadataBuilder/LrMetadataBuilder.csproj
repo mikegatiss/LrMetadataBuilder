@@ -5,6 +5,13 @@
     <UserSecretsId>aspnet-LrMetadataBuilder-AA745CD4-941E-4784-B280-E30236C43BD9</UserSecretsId>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Compile Remove="Data\Migrations\20180728123951_AddedLeaguesTeamsAndGames.cs" />
+    <Compile Remove="Data\Migrations\20180728123951_AddedLeaguesTeamsAndGames.Designer.cs" />
+    <Compile Remove="Data\Migrations\20180728125737_AddedLeaguesTeamsAndGames.cs" />
+    <Compile Remove="Data\Migrations\20180728125737_AddedLeaguesTeamsAndGames.Designer.cs" />
+  </ItemGroup>
+
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.All" Version="2.0.9" />

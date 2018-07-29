@@ -1,0 +1,57 @@
+﻿@model EventEditViewModel
+
+<h2>Edit</h2>
+
+<h4>Event</h4>
+<hr />
+<div class="row">
+    <div class="col-md-4">
+        <form asp-action="Edit" method="post" role="form">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input type="hidden" asp-for="Id" />
+            <div class="form-group">
+                <label asp-for="EventDate" class="control-label"></label>
+                <input asp-for="EventDate" class="form-control" />
+                <span asp-validation-for="EventDate" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="EventName" class="control-label"></label>
+                <input asp-for="EventName" class="form-control" />
+                <span asp-validation-for="EventName" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="Description" class="control-label"></label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="SelectedVenue" class="control-label">Venue</label>
+                <select asp-for="SelectedVenue" class="form-control" asp-items="Model.SelectVenues"></select>
+            </div>
+            <div class="form-group">
+                <div class="checkbox">
+                    <label>
+                        <input asp-for="Cancelled" /> @Html.DisplayNameFor(model => model.Cancelled)
+                    </label>
+                </div>
+            </div>
+            <div class="form-group">
+                <input type="submit" value="Save" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to List</a>
+</div>
+
+@section scripts{
+    <script>
+        $(document).ready(
+            function () {
+                $("#datepicker").datepicker();
+            }
+        );
+    </script>
+}

@@ -1,21 +1,23 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using LrMetadataBuilder.Models;
 using LrMetadataBuilder.ViewModels;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.EntityFrameworkCore.Query.Internal;
 
 namespace LrMetadataBuilder.Controllers
 {
     public class HomeController : Controller
     {
         private readonly IEventRepository _eventRepository;
+        private readonly IVenueRepository _venueRepository;
 
-        public HomeController(IEventRepository eventRepository)
+        public HomeController(IEventRepository eventRepository, IVenueRepository venueRepository)
         {
             _eventRepository = eventRepository;
+            _venueRepository = venueRepository;
         }
 
 
@@ -43,9 +45,110 @@ namespace LrMetadataBuilder.Controllers
             return View(evt);
         }
 
+        public IActionResult Create()
+        {
+            var viewModel = new EventEditViewModel()
+            {
+                Title = "Add New Event",
+                SelectVenues = _venueRepository.GetSelectListItems(),
+                SelectedVenue = 1
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        public IActionResult Create(EventEditViewModel viewModel)
+        {
+            if (!ModelState.IsValid)
+            {
+                viewModel.SelectVenues = _venueRepository.GetSelectListItems();
+                viewModel.SelectedVenue = 1;
+
+                return View(viewModel);
+            }
+
+            var evnt = new Event()
+            {
+                Name = viewModel.EventName,
+                EventDate = viewModel.EventDate,
+                Description = viewModel.Description,
+                VenueId = viewModel.SelectedVenue,
+                Cancelled = false
+            };
+
+            _eventRepository.Add(evnt);
+            _eventRepository.Save();
+
+            return View("Index");
+        }
+
+        public IActionResult Delete(Event evnt)
+        {
+            _eventRepository.Delete(evnt);
+            _eventRepository.Save();
+            return View("Index");
+        }
+
+        public IActionResult Edit(int? id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            Event evnt = _eventRepository.GetEventById((int)id); // if id is null we won't reach this point
+            if (evnt == null)
+            {
+                return NotFound();
+            }
+
+            var viewModel = new EventEditViewModel()
+            {
+                Title = "Edit Event",
+                Id = evnt.Id,
+                EventName = evnt.Name,
+                EventDate = evnt.EventDate,
+                Description = evnt.Description,
+                SelectVenues = _venueRepository.GetSelectListItems(),
+                SelectedVenue = evnt.VenueId,
+                Cancelled = evnt.Cancelled
+            };
+
+            return View(viewModel);
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Edit([Bind("Id,EventName,EventDate,Description,SelectedVenue,SelectVenues,Cancelled")]
+            EventEditViewModel viewModel)
+        {
+            if (ModelState.IsValid)
+            {
+                var evnt = _eventRepository.GetEventById(viewModel.Id);
+                if (evnt == null)
+                {
+                    return NotFound();
+                }
+
+                evnt.Name = viewModel.EventName;
+                evnt.Description = viewModel.Description;
+                evnt.EventDate = viewModel.EventDate;
+                evnt.VenueId = viewModel.SelectedVenue;
+                evnt.Cancelled = viewModel.Cancelled;
+
+                _eventRepository.Edit(evnt);
+                _eventRepository.Save();
+                return RedirectToAction("Index");
+            }
+
+            return View(viewModel);
+        }
+
         public IActionResult Error()
         {
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
+
     }
 }

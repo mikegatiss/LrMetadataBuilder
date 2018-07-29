@@ -10,5 +10,7 @@ namespace LrMetadataBuilder.ViewModels
     {
         public string Title { get; set; }
         public List<Event> Events;
+        public Event Event;
+        public IEnumerable<Venue> Venues;
     }
 }

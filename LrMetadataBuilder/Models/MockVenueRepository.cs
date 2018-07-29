@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LrMetadataBuilder.Models
 {
@@ -68,6 +69,11 @@ namespace LrMetadataBuilder.Models
         }
 
         public void Save()
+        {
+            throw new NotImplementedException();
+        }
+
+        public IEnumerable<SelectListItem> GetSelectListItems()
         {
             throw new NotImplementedException();
         }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LrMetadataBuilder.Models
 {
@@ -24,6 +25,16 @@ namespace LrMetadataBuilder.Models
             return _appDbContext.Venues.FirstOrDefault(v => v.Id == id);
         }
 
+        public IEnumerable<SelectListItem> GetSelectListItems()
+        {
+            return from v in _appDbContext.Venues
+                orderby v.VenueName
+                select new SelectListItem
+                {
+                    Text = v.VenueName,
+                    Value = v.Id.ToString()
+                };
+        }
         public void Add(Venue venue)
         {
             throw new NotImplementedException();

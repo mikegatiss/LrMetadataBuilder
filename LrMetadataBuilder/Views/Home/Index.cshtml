@@ -13,17 +13,25 @@
             <th>Date</th>
             <th>Event Name</th>
             <th>Venue</th>
+            <th>Action</th>
         </tr>
         @foreach (var evt in Model.Events)
         {
             <tr >
-                <td class="col-md-2">@evt.EventDate</td>
-                <td class="col-md-4">
+                <td class="col-md-2">@evt.EventDate.ToString("dd MMMM yyyy")</td>
+                <td class="col-md-3">
                     <a asp-controller="Home" asp-action="Details" asp-route-id="@evt.Id">@evt.Name</a>
                 </td>
                 <td class="col-md-3">@evt.Venue.VenueName</td>
+                <td class="col-md-2">
+                    <a asp-controller="Home" asp-action="Delete" asp-route-id="@evt.Id">DEL</a> | 
+                    <a asp-controller="Home" asp-action="Edit" asp-route-id="@evt.Id">EDIT</a>
+                </td>
             </tr>
         }
     </table>
+    <div>
+        <a asp-controller="Home" asp-action="Create">Add Event</a>
+    </div>
 
 </div>

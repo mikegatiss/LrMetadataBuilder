@@ -29,22 +29,22 @@ namespace LrMetadataBuilder.Models
 
         public void Add(Event evnt)
         {
-            throw new NotImplementedException();
+            _appDbContext.Events.Add(evnt);
         }
 
         public void Delete(Event evnt)
         {
-            throw new NotImplementedException();
+            _appDbContext.Events.Remove(evnt);
         }
 
         public void Edit(Event evnt)
         {
-            throw new NotImplementedException();
+            _appDbContext.Entry(evnt).State = EntityState.Modified;
         }
 
         public void Save()
         {
-            throw new NotImplementedException();
+            _appDbContext.SaveChanges();
         }
     }
 }

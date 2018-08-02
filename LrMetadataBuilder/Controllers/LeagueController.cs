@@ -54,7 +54,7 @@ namespace LrMetadataBuilder.Controllers
             {
                 _leagueRepository.Add(league);
                 _leagueRepository.Save();
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             return View(league);
         }
@@ -99,7 +99,7 @@ namespace LrMetadataBuilder.Controllers
                         throw;
                     }
                 }
-                return RedirectToAction(nameof(Index));
+                return RedirectToAction("Index");
             }
             return View(league);
         }

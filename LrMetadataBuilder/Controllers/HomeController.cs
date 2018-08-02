@@ -80,14 +80,14 @@ namespace LrMetadataBuilder.Controllers
             _eventRepository.Add(evnt);
             _eventRepository.Save();
 
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         public IActionResult Delete(Event evnt)
         {
             _eventRepository.Delete(evnt);
             _eventRepository.Save();
-            return View("Index");
+            return RedirectToAction("Index");
         }
 
         public IActionResult Edit(int? id)

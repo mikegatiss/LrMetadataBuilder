@@ -83,13 +83,35 @@ namespace LrMetadataBuilder.Controllers
             return RedirectToAction("Index");
         }
 
-        public IActionResult Delete(Event evnt)
+        //public IActionResult Delete(Event evnt)
+        //{
+        //    _eventRepository.Delete(evnt);
+        //    _eventRepository.Save();
+        //    return RedirectToAction("Index");
+        //}
+
+        public IActionResult Delete(int id)
         {
+            var evnt = _eventRepository.GetEventById(id);
+            if (evnt == null)
+            {
+                return NotFound();
+            }
+
+            return View(evnt);
+        }
+
+        [HttpPost, ActionName("Delete")]
+        [ValidateAntiForgeryToken]
+        public IActionResult DeleteConfirmed(int id)
+        {
+            var evnt = _eventRepository.GetEventById(id);
             _eventRepository.Delete(evnt);
             _eventRepository.Save();
             return RedirectToAction("Index");
         }
 
+        //GET: /League/Edit/5
         public IActionResult Edit(int? id)
         {
             if (id == null)
@@ -118,6 +140,7 @@ namespace LrMetadataBuilder.Controllers
             return View(viewModel);
         }
 
+        //POST: /League/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Edit([Bind("Id,EventName,EventDate,Description,SelectedVenue,SelectVenues,Cancelled")]

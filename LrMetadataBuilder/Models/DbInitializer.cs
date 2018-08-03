@@ -108,6 +108,19 @@ namespace LrMetadataBuilder.Models
                 );
             }
 
+            if (!context.Teams.Any())
+            {
+                context.AddRange
+                (
+                    new Team { Name = "Checkerbroads", LeagueId = 1 },
+                    new Team {  Name = "New Wheeled Order", LeagueId = 1},
+                    new Team { Name = "Chaos Engine", LeagueId = 1},
+                    new Team { Name = "Rainy City Allstars", LeagueId = 53},
+                    new Team { Name = "Tender Hooligans", LeagueId = 53},
+                    new Team { Name = "Knights of Oldham", LeagueId = 53}
+                );
+            }
+
             context.SaveChanges();
         }
     }

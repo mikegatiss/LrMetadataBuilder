@@ -37,6 +37,7 @@ namespace LrMetadataBuilder
             services.AddTransient<IVenueRepository, VenueRepository>();
             services.AddTransient<IEventRepository, EventRepository>();
             services.AddTransient<ILeagueRepository, LeagueRepository>();
+            services.AddTransient<ITeamRepository, TeamRepository>();
             
             services.AddTransient<IEmailSender, EmailSender>();
 

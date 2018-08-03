@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LrMetadataBuilder.Models;
 using LrMetadataBuilder.ViewModels;
@@ -17,9 +18,13 @@ namespace LrMetadataBuilder.Controllers
         // GET: League
         public IActionResult Index()
         {
-            ViewBag.Title = "Manage Leagues";
+            var leagues = _leagueRepository.GetAllLeagues().OrderBy(l => l.Name);
 
-            var leagueViewModel = new LeagueViewModel();
+            var leagueViewModel = new LeagueViewModel()
+            {
+                Title = "Manage Leagues",
+                Leagues = leagues.ToList()
+            };
             return View(leagueViewModel);
         }
 
@@ -44,8 +49,6 @@ namespace LrMetadataBuilder.Controllers
         }
 
         // POST: League/Create
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public IActionResult Create([Bind("Id,Name")] League league)
@@ -59,7 +62,7 @@ namespace LrMetadataBuilder.Controllers
             return View(league);
         }
 
-        // GET: League/Edit/5
+        // GET: League/Edit/id
         public IActionResult Edit(int id)
         {
             var league = _leagueRepository.GetLeagueById(id);
@@ -67,17 +70,21 @@ namespace LrMetadataBuilder.Controllers
             {
                 return NotFound();
             }
-            return View(league);
+           
+            var viewModel = new LeagueViewModel()
+            {
+                Name = league.Name,
+                Id = league.Id
+            };
+            return View(viewModel);
         }
 
-        // POST: League/Edit/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for 
-        // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: League/Edit/id
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit(int id, [Bind("Id,Name")] League league)
+        public IActionResult Edit(int id, [Bind("Id,Name")] LeagueViewModel viewModel)
         {
-            if (id != league.Id)
+            if (id != viewModel.League.Id)
             {
                 return NotFound();
             }
@@ -86,11 +93,19 @@ namespace LrMetadataBuilder.Controllers
             {
                 try
                 {
+                    var league = _leagueRepository.GetLeagueById(id);
+                    if (league == null)
+                    {
+                        return NotFound();
+                    }
+
+                    league.Name = viewModel.Name;
+
                     _leagueRepository.Save();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!LeagueExists(league.Id))
+                    if (!LeagueExists(viewModel.Id))
                     {
                         return NotFound();
                     }
@@ -101,7 +116,8 @@ namespace LrMetadataBuilder.Controllers
                 }
                 return RedirectToAction("Index");
             }
-            return View(league);
+
+            return View("Edit");
         }
 
         // GET: League/Delete/5
@@ -125,7 +141,7 @@ namespace LrMetadataBuilder.Controllers
             var league = _leagueRepository.GetLeagueById(id);
             _leagueRepository.Delete(league);
             _leagueRepository.Save();
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction("Index");
         }
 
         private bool LeagueExists(int id)

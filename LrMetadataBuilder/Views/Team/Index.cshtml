@@ -9,7 +9,7 @@
     <thead>
         <tr>
             <th>
-                @Html.DisplayNameFor(model => model.League)
+                @Html.DisplayNameFor(model => model.League.Name)
             </th>
             <th>
                 @Html.DisplayNameFor(model => model.Name)
@@ -21,10 +21,10 @@
 @foreach (var team in Model.Teams) {
         <tr>
             <td>
-                @Html.DisplayFor(modelItem => team.Name)
+                @Html.DisplayFor(modelItem => team.League.Name)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => team.League.Name)
+                @Html.DisplayFor(modelItem => team.Name)
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@team.Id">Edit</a> |

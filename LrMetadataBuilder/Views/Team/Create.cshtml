@@ -1,4 +1,4 @@
-﻿@model LrMetadataBuilder.Models.Team
+﻿@model TeamViewModel
 
 @{
     ViewData["Title"] = "Create";
@@ -18,8 +18,8 @@
                 <span asp-validation-for="Name" class="text-danger"></span>
             </div>
             <div class="form-group">
-                <label asp-for="LeagueId" class="control-label"></label>
-                <select asp-for="LeagueId" class ="form-control" asp-items="ViewBag.LeagueId"></select>
+                <label asp-for="SelectedLeague" class="control-label">League</label>
+                <select asp-for="SelectedLeague" class ="form-control" asp-items="Model.SelectLeagues"></select>
             </div>
             <div class="form-group">
                 <input type="submit" value="Create" class="btn btn-default" />

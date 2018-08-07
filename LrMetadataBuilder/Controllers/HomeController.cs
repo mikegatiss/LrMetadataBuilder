@@ -83,13 +83,6 @@ namespace LrMetadataBuilder.Controllers
             return RedirectToAction("Index");
         }
 
-        //public IActionResult Delete(Event evnt)
-        //{
-        //    _eventRepository.Delete(evnt);
-        //    _eventRepository.Save();
-        //    return RedirectToAction("Index");
-        //}
-
         public IActionResult Delete(int id)
         {
             var evnt = _eventRepository.GetEventById(id);

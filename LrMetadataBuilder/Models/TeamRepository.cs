@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 
 namespace LrMetadataBuilder.Models
@@ -28,22 +29,33 @@ namespace LrMetadataBuilder.Models
 
         public void Add(Team team)
         {
-            throw new NotImplementedException();
+            _appDbContext.Teams.Add(team);
         }
 
         public void Delete(Team team)
         {
-            throw new NotImplementedException();
+            _appDbContext.Teams.Remove(team);
         }
 
         public void Edit(Team team)
         {
-            throw new NotImplementedException();
+            _appDbContext.Entry(team).State = EntityState.Modified;
         }
 
         public void Save()
         {
-            throw new NotImplementedException();
+            _appDbContext.SaveChanges();
+        }
+
+        public IEnumerable<SelectListItem> GetSelectListItems()
+        {
+            return from l in _appDbContext.Leagues
+                orderby l.Name
+                select new SelectListItem
+                {
+                    Text = l.Name,
+                    Value = l.Id.ToString()
+                };
         }
     }
 }

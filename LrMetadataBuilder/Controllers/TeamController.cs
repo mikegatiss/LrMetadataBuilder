@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using LrMetadataBuilder.Models;
 using LrMetadataBuilder.ViewModels;
@@ -12,12 +8,13 @@ namespace LrMetadataBuilder.Controllers
 {
     public class TeamController : Controller
     {
-        private readonly AppDbContext _context;
         private readonly ITeamRepository _teamRepository;
+        private readonly ILeagueRepository _leagueRepository;
 
-        public TeamController(ITeamRepository teamRepository)
+        public TeamController(ITeamRepository teamRepository, ILeagueRepository leagueRepository)
         {
             _teamRepository = teamRepository;
+            _leagueRepository = leagueRepository;
         }
 
         // GET: Team
@@ -31,7 +28,7 @@ namespace LrMetadataBuilder.Controllers
                 Teams = teams.ToList()
             };
 
-            return View("Index");
+            return View(teamViewModel);
 
         }
 
@@ -55,8 +52,14 @@ namespace LrMetadataBuilder.Controllers
         // GET: Team/Create
         public IActionResult Create()
         {
-            ViewData["LeagueId"] = new SelectList(_context.Leagues, "Id", "Id");
-            return View();
+            var viewModel = new TeamViewModel()
+            {
+                Title = "Add New Team",
+                SelectLeagues = _leagueRepository.GetSelectListItems(),
+                SelectedLeague = 1
+            };
+
+            return View(viewModel);
         }
 
         // POST: Team/Create
@@ -64,33 +67,52 @@ namespace LrMetadataBuilder.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("Id,Name,LeagueId")] Team team)
+        public IActionResult Create([Bind("Id,Name,LeagueId,SelectedLeague,SelectLeagues")] TeamViewModel viewModel)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                _context.Add(team);
-                await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                viewModel.SelectLeagues = _leagueRepository.GetSelectListItems();
+                viewModel.SelectedLeague = 1;
+
+                return View(viewModel);
             }
-            ViewData["LeagueId"] = new SelectList(_context.Leagues, "Id", "Id", team.LeagueId);
-            return View(team);
+
+            var team = new Team()
+            {
+                Name = viewModel.Name,
+                LeagueId = viewModel.SelectedLeague
+            };
+
+            _teamRepository.Add(team);
+            _teamRepository.Save();
+
+            return RedirectToAction("Index");
         }
 
         // GET: Team/Edit/5
-        public async Task<IActionResult> Edit(int? id)
+        public IActionResult Edit(int? id)
         {
             if (id == null)
             {
                 return NotFound();
             }
 
-            var team = await _context.Teams.SingleOrDefaultAsync(m => m.Id == id);
+            Team team = _teamRepository.GetTeamById((int) id);
             if (team == null)
             {
                 return NotFound();
             }
-            ViewData["LeagueId"] = new SelectList(_context.Leagues, "Id", "Id", team.LeagueId);
-            return View(team);
+
+            var viewModel = new TeamViewModel()
+            {
+                Title = "Edit Team",
+                Id = team.Id,
+                Name = team.Name,
+                SelectLeagues = _teamRepository.GetSelectListItems(),
+                SelectedLeague = team.LeagueId
+            };
+
+            return View(viewModel);
         }
 
         // POST: Team/Edit/5
@@ -98,48 +120,30 @@ namespace LrMetadataBuilder.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("Id,Name,LeagueId")] Team team)
+        public IActionResult Edit([Bind("Id,Name,LeagueId,SelectedLeague,SelectLeagues")] TeamViewModel viewModel)
         {
-            if (id != team.Id)
-            {
-                return NotFound();
-            }
-
             if (ModelState.IsValid)
             {
-                try
+                var team = _teamRepository.GetTeamById(viewModel.Id);
+                if (team == null)
                 {
-                    _context.Update(team);
-                    await _context.SaveChangesAsync();
+                    return NotFound();
                 }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!TeamExists(team.Id))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
-                }
-                return RedirectToAction(nameof(Index));
+
+                team.Name = viewModel.Name;
+                team.LeagueId = viewModel.SelectedLeague;
+
+                _teamRepository.Edit(team);
+                _teamRepository.Save();
+                return RedirectToAction("Index");
             }
-            ViewData["LeagueId"] = new SelectList(_context.Leagues, "Id", "Id", team.LeagueId);
-            return View(team);
+            return View(viewModel);
         }
 
         // GET: Team/Delete/5
-        public async Task<IActionResult> Delete(int? id)
+        public IActionResult Delete(int id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
-
-            var team = await _context.Teams
-                .Include(t => t.League)
-                .SingleOrDefaultAsync(m => m.Id == id);
+            var team = _teamRepository.GetTeamById(id);
             if (team == null)
             {
                 return NotFound();
@@ -151,17 +155,13 @@ namespace LrMetadataBuilder.Controllers
         // POST: Team/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> DeleteConfirmed(int id)
+        public IActionResult DeleteConfirmed(int id)
         {
-            var team = await _context.Teams.SingleOrDefaultAsync(m => m.Id == id);
-            _context.Teams.Remove(team);
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            var team = _teamRepository.GetTeamById(id);
+            _teamRepository.Delete(team);
+            _teamRepository.Save();
+            return RedirectToAction("Index");
         }
 
-        private bool TeamExists(int id)
-        {
-            return _context.Teams.Any(e => e.Id == id);
-        }
     }
 }

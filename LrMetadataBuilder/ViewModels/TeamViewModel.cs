@@ -10,14 +10,15 @@ namespace LrMetadataBuilder.ViewModels
 {
     public class TeamViewModel
     {
+        public string Title { get; set; }
         public int Id { get; set; }
 
         [Display(Name = "Team Name")]
         [Required(ErrorMessage = "Please provide a Team Name")]
         public string Name { get; set; }
 
-        [Display(Name = "League (optional)")]
-        public string League { get; set; }
+        [Display(Name = "League")]
+        public League League { get; set; }
 
         public int SelectedLeague { get; set; }
         public IEnumerable<SelectListItem> SelectLeagues { get; set; }

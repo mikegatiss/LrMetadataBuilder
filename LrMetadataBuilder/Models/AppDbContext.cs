@@ -30,7 +30,15 @@ namespace LrMetadataBuilder.Models
             // Add your customizations after calling base.OnModelCreating(builder);
             foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
             {
-                relationship.DeleteBehavior = DeleteBehavior.Restrict;
+                try
+                {
+                    relationship.DeleteBehavior = DeleteBehavior.Restrict;
+                }
+                catch (Exception exc)
+                {
+                    Console.WriteLine(exc);
+                    throw new Exception();
+                }
             }
         }
 

@@ -1,0 +1,58 @@
+﻿@model EventGameListViewModel
+
+<h2>Index</h2>
+
+<div class="form-horizontal">
+    <div class="form-group">
+        @Html.LabelFor(model => model.EventName, new { @class = "control-label col-md-2" })
+        <div class="col-md-10">
+            @Html.EditorFor(model => model.EventName, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.EditorFor(model => model.Venue, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+            @Html.EditorFor(model => model.EventDate, new { htmlAttributes = new { @class = "form-control", @readonly = "readonly" } })
+        </div>
+    </div>
+</div>
+
+
+@if (Model.Games != null)
+{
+        for (var i = 0; i < Model.Games.Count(); i++)
+        {
+            <div class="row">
+                @Html.HiddenFor(x => Model.Games[i].EventId)
+                <div class="col-md-10">
+                    <table class="table">
+                        <tr>
+                            <th>
+                                @Html.DisplayFor(model => model.Games[0].HomeTeam)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Games[0].HomeScore)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Games[0].AwayTeam)
+                            </th>
+                            <th>
+                                @Html.DisplayFor(model => model.Games[0].AwayScore)
+                            </th>
+                        </tr>
+                        <tr>
+                            <td>
+                                @Html.TextBoxFor(x => Model.Games[i].HomeTeam, new {@class = "form-control"})
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(x => Model.Games[i].HomeScore, new {@class = "form-control"})
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(x => Model.Games[i].AwayTeam, new {@class = "form-control"})
+                            </td>
+                            <td>
+                                @Html.TextBoxFor(x => Model.Games[i].AwayScore, new {@class = "form-control"})
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+
+        }
+}

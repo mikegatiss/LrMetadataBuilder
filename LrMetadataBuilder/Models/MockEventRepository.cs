@@ -35,9 +35,9 @@ namespace LrMetadataBuilder.Models
             return _events;
         }
 
-        public Event GetEventById(int eventId)
+        public Event GetEventById(int? eventId)
         {
-            return _events.FirstOrDefault(e => e.Id == eventId);
+            return _events.Find(e => e.Id == eventId);
         }
 
         public void Add(Event evnt)

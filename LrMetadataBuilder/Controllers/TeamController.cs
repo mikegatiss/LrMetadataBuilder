@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using LrMetadataBuilder.Models;
 using LrMetadataBuilder.ViewModels;
 

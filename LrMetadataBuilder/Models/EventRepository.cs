@@ -15,16 +15,19 @@ namespace LrMetadataBuilder.Models
             _appDbContext = appDbContext;
         }
 
+        public EventRepository()
+        {
+        }
 
         public virtual IEnumerable<Event> GetAllEvents()
         {
             return _appDbContext.Events.Include(e=>e.Venue);
         }
 
-        public Event GetEventById(int eventId)
+        public Event GetEventById(int? eventId)
         {
             var query = _appDbContext.Events.Include(e => e.Venue);
-            return query.FirstOrDefault(e => e.Id == eventId);
+            return query.SingleOrDefault(e => e.Id == (int) eventId);
         }
 
         public void Add(Event evnt)

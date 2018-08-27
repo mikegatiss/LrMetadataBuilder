@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
+using LrMetadataBuilder.Models;
 using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace LrMetadataBuilder.ViewModels
@@ -29,6 +30,8 @@ namespace LrMetadataBuilder.ViewModels
         public IEnumerable<SelectListItem> SelectVenues { get; set; }
 
         public bool Cancelled { get; set; }
+
+        public IEnumerable<Game> Games;
 
     }
 }

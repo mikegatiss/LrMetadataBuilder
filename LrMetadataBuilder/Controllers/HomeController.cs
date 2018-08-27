@@ -34,15 +34,29 @@ namespace LrMetadataBuilder.Controllers
             return View(homeViewModel);
         }
 
-        public IActionResult Details(int id)
+        public IActionResult Details(int? id)
         {
+            if (id == null)
+            {
+                return NotFound();
+            }
             var evt = _eventRepository.GetEventById(id);
             if (evt == null)
             {
                 return NotFound();
             }
+            var eventViewModel = new EventViewModel()
+            {
+                Id = evt.Id,
+                Name = evt.Name,
+                Description = evt.Description,
+                EventDate = evt.EventDate,
+                Venue = evt.Venue,
+                Games = evt.Games
+            };
 
-            return View(evt);
+
+            return View(eventViewModel);
         }
 
         public IActionResult Create()
@@ -109,7 +123,7 @@ namespace LrMetadataBuilder.Controllers
         {
             if (id == null)
             {
-                return NotFound();
+                return BadRequest();
             }
 
             Event evnt = _eventRepository.GetEventById((int)id); // if id is null we won't reach this point
@@ -134,9 +148,9 @@ namespace LrMetadataBuilder.Controllers
         }
 
         //POST: /League/Edit/5
-        [HttpPost]
+        [HttpPost, ActionName("Edit")]
         [ValidateAntiForgeryToken]
-        public IActionResult Edit([Bind("Id,EventName,EventDate,Description,SelectedVenue,SelectVenues,Cancelled")]
+        public IActionResult EditConfirmed([Bind("Id,EventName,EventDate,Description,SelectedVenue,SelectVenues,Cancelled")]
             EventEditViewModel viewModel)
         {
             if (ModelState.IsValid)

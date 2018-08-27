@@ -12,15 +12,16 @@ namespace LrMetadataBuilder.Models
     {
         [Key]
         public int Id { get; set; }
-        public int? EventId { get; set; } // needs to be nullable as not all games are part of bigger event 
-        [ForeignKey("HomeTeam")]
-        public int HomeTeamId { get; set; }
+        public int EventId { get; set; } 
         [ForeignKey("AwayTeam")]
         public int AwayTeamId { get; set; }
+        [ForeignKey("HomeTeam")]
+        public int HomeTeamId { get; set; }
         public int HomeScore { get; set; }
         public int AwayScore { get; set; }
+        public DateTime WhistleTime { get; set; }
 
-        public virtual Team HomeTeam { get; set; }
         public virtual Team AwayTeam { get; set; }
+        public virtual Team HomeTeam { get; set; }
     }
 }

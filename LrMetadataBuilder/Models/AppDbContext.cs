@@ -28,18 +28,19 @@ namespace LrMetadataBuilder.Models
             // Customize the ASP.NET Identity model and override the defaults if needed.
             // For example, you can rename the ASP.NET Identity table names and more.
             // Add your customizations after calling base.OnModelCreating(builder);
-            foreach (var relationship in builder.Model.GetEntityTypes().SelectMany(e => e.GetForeignKeys()))
-            {
-                try
-                {
-                    relationship.DeleteBehavior = DeleteBehavior.Restrict;
-                }
-                catch (Exception exc)
-                {
-                    Console.WriteLine(exc);
-                    throw new Exception();
-                }
-            }
+            builder.Entity<Game>()
+                .HasOne(m => m.HomeTeam)
+                .WithMany(t => t.HomeGames)
+                .HasForeignKey(m => m.HomeTeamId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+            builder.Entity<Game>()
+                .HasOne(m => m.AwayTeam)
+                .WithMany(t => t.AwayGames)
+                .HasForeignKey(m => m.AwayTeamId)
+                .IsRequired(true)
+                .OnDelete(DeleteBehavior.Restrict);
+
         }
 
         

@@ -32,7 +32,6 @@ namespace lrMetadataBuilderTest.Controllers
         private IQueryable<Team> _teams;
         private List<League> _leagues;
 
-        //TODO: look at https://www.dotnetcurry.com/aspnet-core/1414/unit-testing-aspnet-core
         public HomeControllerTest()
         {
 
@@ -52,7 +51,8 @@ namespace lrMetadataBuilderTest.Controllers
             _mockEventRepository.Setup(mer => mer.GetEventById(
                     It.IsAny<int>()))
                 .Returns((int i) => _events.SingleOrDefault(x => x.Id == i));
-
+            _mockEventRepository.Setup(mer => mer.Add(It.IsAny<Event>()))
+                .Verifiable();
             _venues = new List<Venue>
             {
                 new Venue
@@ -260,6 +260,31 @@ namespace lrMetadataBuilderTest.Controllers
             _mockEventRepository.Verify( evnt => evnt.Add(mockEvent), Times.Never);
 
         }
+
+        [Fact]
+        public void Create_RedirectsToActionIndex_WhenModelIsValid()
+        {
+            //Arrange
+            var mockEventEditViewModel = new EventEditViewModel()
+            {
+                Id = 20,
+                EventName = "Test Event Name",
+                EventDate = DateTime.Parse("2018-08-14"),
+                SelectedVenue = 1
+            };
+
+            //Act
+            var result = _homeController.Create(mockEventEditViewModel);
+
+            //Assert
+            Assert.NotNull(result);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Null(redirectResult.ControllerName);
+            Assert.Equal("Index", redirectResult.ActionName);
+
+        }
+
+
         [Fact]
         public void Delete_ReturnsNotFoundWhenEventDoesNotExist()
         {
@@ -287,6 +312,22 @@ namespace lrMetadataBuilderTest.Controllers
             Assert.NotNull(result);
             var viewResult = Assert.IsAssignableFrom<ViewResult>(result);
             var model = Assert.IsAssignableFrom<Event>(viewResult.ViewData.Model);
+        }
+
+        [Fact]
+        public void DeleteConfirmed_ReturnsRedirectToIndex()
+        {
+            //Arrange
+            //  done in constructor
+            //Act
+            var result = _homeController.DeleteConfirmed(1);
+
+            //Assert
+            Assert.NotNull(result);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Null(redirectResult.ControllerName);
+            Assert.Equal("Index", redirectResult.ActionName);
+
         }
 
         [Fact]
@@ -330,6 +371,38 @@ namespace lrMetadataBuilderTest.Controllers
             Assert.NotNull(result);
             var viewResult = Assert.IsAssignableFrom<ViewResult>(result);
             var model = Assert.IsAssignableFrom<EventEditViewModel>(viewResult.ViewData.Model);
+        }
+
+        [Fact]
+        public void EditConfirmed_ReturnsNotFound_WhenEventDoesNotExist()
+        {
+            //Arrange
+            var eventViewModelMock = Mock.Of<EventEditViewModel>();
+            eventViewModelMock.Id = 20;
+
+            //Act
+            var result = _homeController.EditConfirmed(eventViewModelMock);
+
+            //Assert
+            Assert.NotNull(result);
+            Assert.IsAssignableFrom<NotFoundResult>(result);
+        }
+
+        [Fact]
+        public void EditConfirmed_ReturnsRedirectToIndex_WhenEventExists()
+        {
+            //Arrange
+            var eventViewModelMock = Mock.Of<EventEditViewModel>();
+            eventViewModelMock.Id = 1;
+
+            //Act
+            var result = _homeController.EditConfirmed(eventViewModelMock);
+
+            //Assert
+            Assert.NotNull(result);
+            var redirectResult = Assert.IsType<RedirectToActionResult>(result);
+            Assert.Null(redirectResult.ControllerName);
+            Assert.Equal("Index", redirectResult.ActionName);
         }
     }
 }

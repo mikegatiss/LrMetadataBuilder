@@ -24,7 +24,12 @@ namespace LrMetadataBuilder.Controllers
             if (eventId != null)
             {
                 var viewModel = _gameRepository.GetGamesByEventId((int) eventId);
-                return View(viewModel);
+                if (viewModel != null)
+                {
+                    return View(viewModel);
+                }
+
+                return NotFound();
             }
 
             return BadRequest();
@@ -35,7 +40,7 @@ namespace LrMetadataBuilder.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Index(EventGameListViewModel viewModel)
+        public IActionResult Create(EventGameListViewModel viewModel)
         {
             if (ModelState.IsValid)
             {

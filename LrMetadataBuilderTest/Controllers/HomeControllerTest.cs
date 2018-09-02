@@ -10,6 +10,7 @@ using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
 using FluentAssertions;
+using lrMetadataBuilderTest.Utilities;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore.Internal;
 
@@ -46,75 +47,9 @@ namespace lrMetadataBuilderTest.Controllers
                 new Event {Id=5,Name="Event Name 5", EventDate=DateTime.Parse("2018-11-14"),Description="Event Description 5",Cancelled = false,VenueId = 2}
             }.AsQueryable();
 
-            _mockEventRepository = new Mock<IEventRepository>();
-            _mockEventRepository.Setup(mer => mer.GetAllEvents()).Returns(_events);
-            _mockEventRepository.Setup(mer => mer.GetEventById(
-                    It.IsAny<int>()))
-                .Returns((int i) => _events.SingleOrDefault(x => x.Id == i));
-            _mockEventRepository.Setup(mer => mer.Add(It.IsAny<Event>()))
-                .Verifiable();
-            _venues = new List<Venue>
-            {
-                new Venue
-                {
-                    Id = 1,
-                    VenueName = "VenueName 1",
-                    VenueAddress1 = "VenueAddress1 1",
-                    VenueAddress2 = "VenueAddress2 1",
-                    VenueAddressTown = "VenueAddressTown 1",
-                    VenueAddressCounty = "VenueAddressCounty 1"
-                },
-                new Venue
-                {
-                    Id = 2,
-                    VenueName = "VenueName 2",
-                    VenueAddress1 = "VenueAddress1 2",
-                    VenueAddress2 = "VenueAddress2 2",
-                    VenueAddressTown = "VenueAddressTown 2",
-                    VenueAddressCounty = "VenueAddressCounty 2"
-                }
-
-            };
-            _mockVenueRepository = new Mock<IVenueRepository>();
-            _mockVenueRepository.Setup(mvr => mvr.GetAllVenues()).Returns(_venues);
-            _mockVenueRepository.Setup(mvr => mvr.GetVenueById(
-                It.IsAny<int>()))
-                .Returns((int i) => _venues.SingleOrDefault(x => x.Id == i));
-            _mockVenueRepository.Setup(mvr => mvr.GetSelectListItems())
-                .Returns(
-                    new List<SelectListItem>
-                    {
-                        new SelectListItem() {Value = "1", Text = "Venue 1"},
-                        new SelectListItem() {Value = "2", Text = "Venue 2"}
-                    }
-                );
-            _leagues = new List<League>
-            {
-                new League
-                {
-                    Id = 1,
-                    Name = "League 1"
-                },
-                new League
-                {
-                    Id = 2,
-                    Name = "League 2"
-                }
-            };
-            _mockLeagueRepository = new Mock<ILeagueRepository>();
-            _mockLeagueRepository.Setup(mlr => mlr.GetAllLeagues()).Returns(_leagues);
-            _mockLeagueRepository.Setup(mlr =>mlr.GetLeagueById(
-                It.IsAny<int>()))
-                .Returns((int i) => _leagues.SingleOrDefault(x => x.Id == i));
-            _mockLeagueRepository.Setup(mlr => mlr.GetSelectListItems())
-                .Returns(
-                    new List<SelectListItem>
-                    {
-                        new SelectListItem() {Value = "1", Text = "League 1"},
-                        new SelectListItem() {Value = "2", Text = "League 2"}
-
-                    }
-                );
+            _mockEventRepository = DataHelper.GetTestEventRepository();
+            _mockVenueRepository = DataHelper.GetTestVenueRepository();
+            _mockLeagueRepository = DataHelper.GetTestLeagueRepository();
 
             _teams = new List<Team>
             {
@@ -165,7 +100,7 @@ namespace lrMetadataBuilderTest.Controllers
             //Assert
             var viewResult = Assert.IsType<ViewResult>(result);
             var model = Assert.IsAssignableFrom<HomeViewModel>(viewResult.ViewData.Model);
-            var eventsModel = Assert.IsAssignableFrom<IList<Event>>(model.Events);
+            Assert.IsAssignableFrom<IList<Event>>(model.Events);
             Assert.Equal(5, model.Events.Count());
 
         }
@@ -225,7 +160,7 @@ namespace lrMetadataBuilderTest.Controllers
             //Assert
             Assert.NotNull(result);
             var viewResult = Assert.IsAssignableFrom<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<EventViewModel>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<EventViewModel>(viewResult.ViewData.Model);
         }
 
         [Fact]
@@ -240,7 +175,7 @@ namespace lrMetadataBuilderTest.Controllers
             //Assert
             Assert.NotNull(result);
             var viewResult = Assert.IsAssignableFrom<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<EventEditViewModel>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<EventEditViewModel>(viewResult.ViewData.Model);
         }
 
         [Fact]
@@ -311,7 +246,7 @@ namespace lrMetadataBuilderTest.Controllers
             //Assert
             Assert.NotNull(result);
             var viewResult = Assert.IsAssignableFrom<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<Event>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<Event>(viewResult.ViewData.Model);
         }
 
         [Fact]
@@ -341,7 +276,7 @@ namespace lrMetadataBuilderTest.Controllers
 
             //Assert
             Assert.NotNull(result);
-            var viewResult = Assert.IsAssignableFrom<BadRequestResult>(result);
+            Assert.IsAssignableFrom<BadRequestResult>(result);
         }
 
         [Fact]
@@ -355,7 +290,7 @@ namespace lrMetadataBuilderTest.Controllers
 
             //Assert
             Assert.NotNull(result);
-            var viewResult = Assert.IsAssignableFrom<NotFoundResult>(result);
+            Assert.IsAssignableFrom<NotFoundResult>(result);
         }
 
         [Fact]
@@ -370,7 +305,7 @@ namespace lrMetadataBuilderTest.Controllers
             //Assert
             Assert.NotNull(result);
             var viewResult = Assert.IsAssignableFrom<ViewResult>(result);
-            var model = Assert.IsAssignableFrom<EventEditViewModel>(viewResult.ViewData.Model);
+            Assert.IsAssignableFrom<EventEditViewModel>(viewResult.ViewData.Model);
         }
 
         [Fact]

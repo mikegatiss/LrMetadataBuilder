@@ -133,7 +133,7 @@ namespace lrMetadataBuilderTest.Controllers
         [Fact]
         public void Details_ReturnsDetailsView_WhenEventExists()
         {
-            //Arrange - all done in constructor
+            //Arrange 
             var mockId = 1;
             var mockVenue = new Venue()
             {

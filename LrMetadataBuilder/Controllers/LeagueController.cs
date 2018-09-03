@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using LrMetadataBuilder.Models;
 using LrMetadataBuilder.ViewModels;
+using Microsoft.EntityFrameworkCore.Query.Expressions;
 
 namespace LrMetadataBuilder.Controllers
 {
@@ -29,37 +30,47 @@ namespace LrMetadataBuilder.Controllers
         }
 
         // GET: League/Details/5
-        public IActionResult Details(int id)
+        public IActionResult Details(int? id)
         {
-
-            var league = _leagueRepository.GetLeagueById(id);
-            if (league == null)
+            if (id != null)
             {
+                var league = _leagueRepository.GetLeagueById((int)id);
+                if (league != null)
+                {
+                    var leagueViewModel = new LeagueViewModel();
+                    leagueViewModel.Id = league.Id;
+                    leagueViewModel.Name = league.Name;
+                    
+                    return View(leagueViewModel);
+                }
+
                 return NotFound();
             }
 
-            return View(league);
+            return BadRequest();
  
         }
 
         // GET: League/Create
         public IActionResult Create()
         {
-            return View();
+            var leagueViewModel = new LeagueViewModel();
+            return View(leagueViewModel);
         }
 
         // POST: League/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public IActionResult Create([Bind("Id,Name")] League league)
+        public IActionResult Create([Bind("Name")] LeagueViewModel leagueViewModel)
         {
             if (ModelState.IsValid)
             {
+                var league = new League(){Name = leagueViewModel.Name};
                 _leagueRepository.Add(league);
                 _leagueRepository.Save();
                 return RedirectToAction("Index");
             }
-            return View(league);
+            return View(leagueViewModel);
         }
 
         // GET: League/Edit/id

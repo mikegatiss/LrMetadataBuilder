@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Threading.Tasks;
 using LrMetadataBuilder.Controllers;
 using LrMetadataBuilder.Models;
 using LrMetadataBuilder.ViewModels;
 using Microsoft.AspNetCore.Mvc;
 using Moq;
 using Xunit;
-using FluentAssertions;
-using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Internal;
 using lrMetadataBuilderTest.Utilities;
-using Microsoft.EntityFrameworkCore.Query.ResultOperators;
 
 namespace lrMetadataBuilderTest.Controllers
 {
